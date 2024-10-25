@@ -9,16 +9,17 @@ def fetch_nordpool_prices(year, month, day, price_area):
     
     # Make the GET request
     response = requests.get(url)
+    price_list = []
     
     # Check for a successful response
     if response.status_code == 200:
         data = response.json()  # Parse JSON response
         data = pd.DataFrame(data)
-        data = data.drop(columns=['EUR_per_kWh', 'EXR', 'time_start', 'time_end']) 
-        return data
+        for item in data["NOK_per_kWh"]:
+            price_list.append(item)
+        return price_list
     else:
         print(f"Failed to fetch data: {response.status_code}")
         return None
 
-# Fetch data
-data = fetch_nordpool_prices(2024, 10, 25, "NO5")
+# fetch_nordpool_prices(yyyy, mm, dd, "NO[1-5]")
