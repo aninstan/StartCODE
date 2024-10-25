@@ -18,18 +18,21 @@ def weather_forecast(lat, lon):
         data = response.json()
         
         # Initialize lists to store data
+        dates = []
         times = []
         temperatures = []
         cloudiness = []
         
         # Extract relevant data from each time-series entry
         for entry in data['properties']['timeseries']:
-            times.append(entry['time'])
+            dates.append(entry['time'][:10])
+            times.append(entry['time'][11:-7])
             temperatures.append(entry['data']['instant']['details']['air_temperature'])
             cloudiness.append(entry['data']['instant']['details'].get('cloud_area_fraction', None))
         
         # Create a DataFrame from the lists
-        df = pd.DataFrame({
+        df = pd.DataFrame({ 
+            "date": dates,
             "time": times,
             "temperature": temperatures,
             "cloudiness": cloudiness
@@ -42,6 +45,10 @@ def weather_forecast(lat, lon):
 
 # Example usage
 print(weather_forecast(59.9, 10.8)) # Oslo, Norway
+
+
+
+
 
 def historical_weather(loc):
     # make 1-211102 a variable for the url
