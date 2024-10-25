@@ -44,7 +44,7 @@ def weather_forecast(lat, lon):
         print(f"Failed to retrieve data: {response.status_code}")
 
 # Example usage
-print(weather_forecast(59.9, 10.8)) # Oslo, Norway
+weather_forecast(59.9, 10.8)
 
 
 
