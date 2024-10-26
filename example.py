@@ -117,5 +117,3 @@ def cashmoney(spot_prices, grid_power):
 if __name__ == "__main__":
     main()
 
-print("Skibidi")
-

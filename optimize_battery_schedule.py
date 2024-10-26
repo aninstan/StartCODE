@@ -1,3 +1,4 @@
+import numpy as np
 
 def optimize_battery_schedule(battery_capacity_kWh, battery_charge_rate_kW, spot_price, load_kWh, pv_production_kWh, init_battery_soc):
     """
@@ -81,4 +82,9 @@ def optimize_battery_schedule(battery_capacity_kWh, battery_charge_rate_kW, spot
         
         state_of_charge[hour] = max(0, min(100, state_of_charge[hour]))
     
-    return state_of_charge, power_from_grid
+    money = np.dot(net_load, spot_price)
+    money_list = []
+    for n in range(hours):
+        money_list.append(spot_price[n] * net_load[n])
+
+    return state_of_charge, power_from_grid, money, money_list
