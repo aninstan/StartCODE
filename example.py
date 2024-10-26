@@ -81,9 +81,11 @@ def main():
     )
 
     # Uncomment line below for plot
-    # plot_result(spot_prices, load, pv_production, grid_power, soc)
+    #plot_result(spot_prices, load, pv_production, grid_power, soc)
     
   
 
 if __name__ == "__main__":
     main()
+
+print("Skibidi")
