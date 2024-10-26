@@ -1,0 +1,26 @@
+<html>
+    <head>
+        <title>Flask App</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="{{ url_for( 'static', filename='style.css') }}">
+    </head>
+
+    <body>
+        <div class="container">
+            <p>app</p>
+            <form method="POST">
+                <input name="kWh">
+                <input name="kWh">
+                <input name="kWh">
+                <input type="submit">
+            </form>
+            
+        </div>
+
+        <div id="plot-stack">
+            <div class="container" id="1">a</div>
+            <div class="container" id="2">a</div>
+            <div class="container" id="3">a</div>
+        </div>
+    </body>
+</html>  
