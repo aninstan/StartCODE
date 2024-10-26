@@ -1,34 +1,58 @@
-import matplotlib.pyplot as plt
 import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
 
-def handle_data(filename):
-    df = pd.read_csv(filename)
-    df = df.dropna()
-    return df
-
-def consumption_data(data):
-    # gruppere dataen etter dato og finne gjennomsnittlig forbruk per dag
-    data['From'] = pd.to_datetime(data['From'])
-    data['From'] = data['From'].dt.date
-    data['From'] = pd.to_datetime(data['From'])
+def consumption(file_path):
+    # Load and clean the data
+    data = pd.read_csv(file_path).dropna()
+    data = data.head(100000)
     
-    daily_consumption = data.groupby('From')['Demand_kWh'].mean()
-    return daily_consumption
+    # Take the mean of 'Demand_kWh' for each hour
+    hourly_mean_demand = data.groupby('Hour')['Demand_kWh'].mean()    
+    return hourly_mean_demand
 
-def plot_consumption(data):
-    plt.figure(figsize=(12, 6))
-    plt.plot(data.index, data.values, 'b-', marker='o')
-    plt.xlabel('Date')
-    plt.ylabel('Consumption (kWh)')
-    plt.title('Daily Energy Consumption')
-    plt.grid(True)
-    plt.show()
+# Load hourly mean demand from the file
+hourly_mean_demand = consumption("data_hourly.csv")
 
-def main():
-    # Handle data
-    filename = 'data_hourly.csv'
-    data = handle_data(filename)
-    daily_consumption = consumption_data(data)
-    plot_consumption(daily_consumption)
+def noise_function(x):
+    # Add Gaussian noise to each data point
+    return x + np.random.normal(0, 0.05)
 
-main()
+def generate_sine_wave(amplitude, length):
+    # Generate a sine wave pattern with a given amplitude and length
+    frequency = 2 * np.pi / length
+    phase_shift = np.pi / 2
+    days = np.arange(length)
+    sine_wave = amplitude * np.sin(frequency * days + phase_shift)
+    return sine_wave
+
+year_data = []
+
+# Step 2: Generate 365 days of noisy demand data
+for _ in range(365):
+    daily_data = hourly_mean_demand.apply(noise_function)  
+    year_data.append(daily_data.values)  
+
+year_data = np.array(year_data)
+sine_wave = generate_sine_wave(0.1, 365)  # Generate a sine wave for 365 days
+
+for i, day_data in enumerate(year_data):
+    year_data[i] = day_data * (1 + sine_wave[i])
+
+year_data_flattened = year_data.flatten()
+x_ticks = np.arange(0, 365 * 24, 24)
+x_labels = [f'Day {i+1}' for i in range(365)]
+
+#dump the data to a csv file
+year_data_flattened = pd.DataFrame(year_data_flattened)
+year_data_flattened.to_csv("year_data_flattened.csv")
+
+"""plt.figure(figsize=(18, 6))
+plt.plot(year_data_flattened)
+plt.xticks(x_ticks, x_labels, rotation=90)  
+plt.title("Year")
+plt.xlabel("Day")
+plt.ylabel("Demand")
+""plt.tight_layout()"""
+
+plt.show()
