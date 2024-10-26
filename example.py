@@ -1,6 +1,7 @@
 
 import matplotlib.pyplot as plt
 from matplotlib.gridspec import GridSpec
+from scraper import fetch_nordpool_prices
 
 from optimize_battery_schedule import optimize_battery_schedule
 
@@ -47,12 +48,7 @@ def main():
     initial_soc = 50  # Start at 50% charge
     
     # Generate example spot prices with peak in morning and evening
-    spot_prices = [
-        0.10, 0.09, 0.08, 0.08, 0.09, 0.15,  # 00:00 - 05:00
-        0.20, 0.25, 0.22, 0.18, 0.15, 0.12,  # 06:00 - 11:00
-        0.11, 0.10, 0.12, 0.14, 0.18, 0.25,  # 12:00 - 17:00
-        0.28, 0.22, 0.18, 0.15, 0.12, 0.11   # 18:00 - 23:00
-    ]
+    spot_prices = fetch_nordpool_prices(2024, 10, 25, "NO1")
     
     # Generate example load profile
     predicted_load = [
@@ -81,9 +77,11 @@ def main():
     )
 
     # Uncomment line below for plot
-    # plot_result(spot_prices, load, pv_production, grid_power, soc)
+    plot_result(spot_prices, predicted_load, predicted_pv_production, grid_power, soc)
     
   
 
 if __name__ == "__main__":
     main()
+
+print("Skibidi")
