@@ -1,0 +1,38 @@
+# Re-importing pandas to resolve the NameError
+import pandas as pd
+import numpy as np
+#import ace_tools as tools
+import matplotlib.pyplot as plt
+import statsmodels.api as sm
+# Reading the data from the CSV file
+file_path = r'C:\Users\hallo\StartCode\StartCODE/data_hourly.csv'
+data = pd.read_csv(file_path)
+
+# Extracting relevant columns: Hour, Demand_kWh, and Temperature
+extracted_data = data[['Hour', 'Demand_kWh', 'Temperature']]
+
+# Displaying the extracted data to the user
+
+#tools.display_dataframe_to_user(name="Extracted Demand and Temperature Data", dataframe=extracted_data)
+
+# fig, ax = plt.subplots(2)
+# ax[0].scatter(data['Temperature'][200:400], data['Demand_kWh'][200:400])
+# ax[1].scatter(data['Hour'][40:200],data['Demand_kWh'][40:200])
+# plt.show()
+
+cov_matrix1 = np.corrcoef(data['Hour'],data['Temperature'])
+cov_matrix2 = np.corrcoef(data['Hour'],data['Demand_kWh'])
+cov_matrix3 = np.corrcoef(data['Temperature'],data['Demand_kWh'])
+
+print(cov_matrix1, "\n\n")
+print(cov_matrix2, "\n\n")
+print(cov_matrix3, "\n\n")
+
+X = np.column_stack((data['Hour'], data['Temperature']))
+X = sm.add_constant(X)  # Adds intercept term
+
+# Fit the model
+model = sm.OLS(data['Demand_kWh'], X).fit()
+
+# Summary of the regression model
+print(model.summary())
