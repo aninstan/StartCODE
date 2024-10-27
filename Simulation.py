@@ -1,6 +1,6 @@
 import numpy as np
 import HouseClass
-import SolarPanel
+# import SolarPanel
 import FourierTransform
 import matplotlib.pyplot as plt
 import random as rd

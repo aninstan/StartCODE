@@ -1,0 +1,49 @@
+import numpy as np
+import matplotlib.pyplot as plt
+def spotpris(dag, P_snitt=45, amplitude=25, faseforskyvning=-61):
+    # Beregner spotpris som en funksjon av dag i året
+    return P_snitt + amplitude * np.sin((2 * np.pi / 365) * (dag - faseforskyvning))
+
+# Eksempel for å beregne spotpris for dag 100
+dag_i_aret = np.arange(0,364)
+pris = spotpris(dag_i_aret)
+
+
+# plt.plot(dag_i_aret, spotpris(dag_i_aret))
+# plt.show()
+
+
+def spotpris_dagen(t, T, gjennomsnitt): #generering av spotpriser som gir topper klokken 14:00 og 19:00
+     
+
+    spotpris_dagen = []
+    for i in range(len(t)):
+        if(i==0):
+                mue=0
+        else:
+            mue = 1/(min(abs(t[i]-8), abs(t[i]-19))+1)*0.6
+        
+        if(T<15):
+            mue*=(15-T)*0.2
+        random_avvik = np.random.normal(mue, 0.08)
+        spotpris_dagen.append(random_avvik)
+
+
+    #  spotpris = np.random.normal(mue,2)
+    return np.array(spotpris_dagen) + gjennomsnitt/2
+     
+    #  for i in range(len(t)):
+    #     if(i==0):
+    #             mue=0
+    #     else:
+    #         mue = random_avvik_liste[i-1]
+    #         print(mue)
+    #     random_avvik = np.random.normal(mue, 0.08)
+    #     random_avvik_liste.append(random_avvik)
+
+
+tid = np.linspace(0,24,24)
+temperatur = 0
+gjennomsnitt = 1
+plt.plot(tid, spotpris_dagen(tid, temperatur, gjennomsnitt))
+plt.show()
