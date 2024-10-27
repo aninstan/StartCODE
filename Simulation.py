@@ -132,7 +132,7 @@ class Simulation:
                 DailyValue = DailyMeanPowerConsumption[DailyIndex-1]
             HourlyPowerConsumption.append(DailyValue + hourlyvariation)
 
-        self.HourlyPowerConsumption = HourlyPowerConsumption
+        self.HourlyPowerConsumption = HourlyPowerConsumption * self.house.getEnergyEfficiencyConstant()
 
 
     def TemperatureSimulator(self):
