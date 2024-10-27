@@ -39,7 +39,6 @@ def temperatur(t, dag_i_aret, temp_avg):
             mue=0
         else:
             mue = random_avvik_liste[i-1]
-            print(mue)
         random_avvik = np.random.normal(mue, 0.08)
         random_avvik_liste.append(random_avvik)
     
