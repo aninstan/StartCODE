@@ -56,7 +56,56 @@ class Simulation:
         
 
         # Generating weather values, specifically the temperature for each hour and cloudiness for each hour
+    def temperatur(dag_i_aret, temp_avg): #generering av temperaturer iløp av en dag
+        theta = 2*np.pi/3 #faseforskyvning, maksimal temperatur inntreffer ca 14:00
+        t = np.arrange(0,24)
+
+        #avvik mellom maksimal og minimal temperatur iløp av dagen:
+        maks_avvik = 10 # 
+        min_avvik = 3   
+        gjennomsnitt_avvik = (maks_avvik + min_avvik) / 2
+        avvik = gjennomsnitt_avvik + A * np.sin(2 * np.pi * (dag_i_aret - 172) / 365)
+        A = avvik/2 # Amplitude (halvparten av differansen mellom maks og min)
+
+        mue = 0 #initial forventet avvik
+        T = 24*60  #minutter i døgnet
+        temp_uten_stoy = A*np.sin(t*2*np.pi/24 - theta) + temp_avg #utregning av temperatur uten støy
+        random_avvik_liste = []
+
+        #generere liste med avvik fra normalfordeling
+        for i in range(T):
+            if(i==0):
+                mue=0
+            else:
+                mue = random_avvik_liste[i-1]
+            random_avvik = np.random.normal(mue, 0.08)
+            random_avvik_liste.append(random_avvik)
+        temp_list_minutt = temp_uten_stoy + random_avvik_liste #temperaturliste for hvert minutt
+        temp_list_hour = [] #temperaturlist for hver time
+        for i in range(24):
+            temp_list_hour.append(temp_list_minutt[i*60])
+        return temp_list_hour
+
+
+
+
+        # Initializing all the buildings that is inside the simulation
+    def generate_spot_prices(self, temp_avg = np.arrange(10,10, 365)):
+        temperature = []
+        spot_prices = []
         
+        hours = np.arange(0,24, 1)
+        for i in range(self.StartTime, self.EndTime):
+            if (i+1)%60 == 0:
+                temperature.append(Temperature_during_day.temperatur(hours, i, temp_avg))
+        
+        for i in range(self.EndTime-self.StartTime):
+            spot_pris = Generert_spotPris.spotpris(hours, temperature, i)
+            spot_prices.append(spot_pris)
+        return spot_prices
+        for i in range(self.numhouses):
+            self.houses[i] = HouseClass.House()
+    
     def EnergyConsumptionGenerator(self):
         # First gnerating the average power usage for each day of the year. 
         DayBasedTimeList = np.linspace(self.StartTime,self.EndTime,self.EndTime-self.StartTime) # Same as self.timelist, but only holds one value per da
@@ -89,7 +138,6 @@ class Simulation:
         self.HourlyPowerConsumption = HourlyPowerConsumption
 
 
-
     def TemperatureSimulator(self):
         # Load the original mean temperatures from the text file
             df = pd.read_csv("mean_temperatures.txt")
@@ -111,3 +159,31 @@ class Simulation:
         a =2
 
 
+
+
+    
+
+
+    
+simulation = Simulation()
+
+xliste = simulation.timelist
+liste = simulation.EstimatedGeneralPower
+fig, ax = plt.subplots()
+ax.plot(xliste,liste)
+plt.show()
+
+print(len(data))
+
+# data = np.array([14.64, 14.9, 15.18, 15.51, 16.97, 18.88, 18.35, 17.46, 18.52, 18.35, #Holds the Power in KW
+#         18.35, 18.53, 17.83, 17.32, 17.97, 17.85, 17.78, 18.31, 18.7, 
+#         18.13, 17.82, 19.16, 18.44, 17.74, 17.19, 17.08, 16.98, 15.11, 
+#         15.52, 14.08, 14.73, 14.37, 15.05, 13.13, 12.29, 11.94, 12.08, 
+#         11.75, 11.63, 12.02, 12.04, 11.57, 11.69, 11.53, 12.01, 12.13, 
+#         11.99, 12.49, 12.56, 13.19, 13.09, 13.62, 13.42, 13.95, 15.17, 
+#         16.19, 15.59, 15.57, 16.11, 16.57, 17.83, 18.49, 18.37, 17.96, 
+#         17.93, 18.5, 21.37, 21.58, 21.79, 20.21, 21.82, 22.53, 22.55, 20.13, 
+#         17.67, 18.24, 18.69, 17.79, 16.69, 15.81, 17.14, 16.24, 15.38, 
+#         15.54, 15.40, 14.04, 13.76, 13.31, 12.41, 12.18, 12.47, 12.32, 
+#         12.30, 12.02, 11.83, 11.72, 11.57, 12.0, 12.25, 12.71, 12.66, 
+#         12.67, 12.63, 13.29, 13.58, 13.65]) * ConversionVariable
