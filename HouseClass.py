@@ -83,7 +83,6 @@ class SolarPanel:
 
 class House:
     #OOOPS: house_area is just the part of the house that is actually heated.
-    #OOOPS: house_area is just the part of the house that is actually heated.
     AVERAGE_ENERGY = energy_data["E"][100] # Based on average energy label and average area for a household
 
 
@@ -102,6 +101,7 @@ class House:
         self.PowerUsage = 0.0
         self.PowerConditionsFactor = 1.0  # Specify the type for clarity
         self.CurrentRegion = CurrentRegion      
+        self.Solarpanels = SolarPanel(SolarPanelArea,eta, I0, S, alpha, T, T0)
         self.Solarpanels = SolarPanel(SolarPanelArea,eta, I0, S, alpha, T, T0)
 
         self.setPowerUsage()

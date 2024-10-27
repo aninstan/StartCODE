@@ -1,10 +1,10 @@
 import numpy as np
 import HouseClass
 import functions
+import functions
 import pandas as pd
 import random as rd
 import pandas as pd
-
 import Temperature_during_day
 
 
@@ -26,6 +26,15 @@ data = np.array([14.64, 14.9, 15.18, 15.51, 16.97, 18.88, 18.35, 17.46, 18.52, 1
         12.30, 12.02, 11.83, 11.72, 11.57, 12.0, 12.25, 12.71, 12.66, 
         12.67, 12.63, 13.29, 13.58, 13.43, 13.62, 15.07, 15.9, 15.01, 
         15.84]) * ConversionVariable
+
+
+# Since our data contains values for two periods (two years) we choose to look at the average when we later calculate the fourierseries
+average_data = []
+for n in range(int(len(data)/2)):
+    data1 = data[n] 
+    data2 = data[n+52]
+    average_data.append((data1+data2)/2) 
+data = average_data
 
 class Simulation:
     temp, clouds = [], []
@@ -81,6 +90,7 @@ class Simulation:
 
             tList = np.arange(len(df[" Mean Temperature"]))
             PureSinus = functions.fourier_series(df[" Mean Temperature"],1 , len(df[" Mean Temperature"]), tList)
+            PureSinus = functions.fourier_series(df[" Mean Temperature"],1 , len(df[" Mean Temperature"]), tList)
             VariationDistribution = PureSinus - df[" Mean Temperature"]
             GeneratedYearlyTemp = PureSinus
             for i in range(len(VariationDistribution)):
@@ -93,11 +103,3 @@ class Simulation:
 
     def WeatherSimulator(self, house):
         a =2
-
-    
-
-
-
-     
-
-simulation = Simulation()
