@@ -24,9 +24,7 @@ def process_form():
    maks_sol = request.form.get('Maks Solinnstråling')
    temp_k = request.form.get('Temperaturkoeffisient')
    ref_temp = request.form.get('Referansetemperatur')
-   
 
-   return None
 
 if __name__ == '__main__':
    app.run(debug=True)

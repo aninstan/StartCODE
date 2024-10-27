@@ -11,7 +11,6 @@
                 <div>Simulate Single Home</div>
                 <div>Simulate Multiple Homes</div>
             </nav>
-            <h1>app</h1>
             <form action="/process_form" method="POST">
                 <div>
                     <h2>Data</h2>
@@ -40,15 +39,15 @@
                 <div>
                     <h2>Solcelle</h2>
                     <label for="Solcelleareal">Solcelleareal:</label>
-                    <input name="Solcelleareal">
+                    <input type="number" name="Solcelleareal">
                     <label for="Virkningsgrad">Virkningsgrad:</label>
-                    <input name="Virkningsgrad">
+                    <input type="number" name="Virkningsgrad">
                     <label for="Maks Solinnstråling">Maks Solinnstråling:</label>
-                    <input name="Maks Solinnstråling">
+                    <input type="number" name="Maks Solinnstråling">
                     <label for="Temperaturkoeffisient">Temperaturkoeffisient:</label>
-                    <input name="Temperaturkoeffisient">
+                    <input type="number" name="Temperaturkoeffisient">
                     <label for="Referansetemperatur">Referansetemperatur:</label>
-                    <input name="Referansetemperatur">
+                    <input type="number" name="Referansetemperatur">
                     <input type="submit" id="submit">
                 </div>
 
@@ -59,8 +58,8 @@
 
         <div id="plot-stack">
             <div class="container" id="1"><img src="/static/plot.svg" alt=""></div>
-            <div class="container" id="2">a</div>
-            <div class="container" id="3">a</div>
+            <div class="container" id="2"><img src="/static/Pvplot.svg" alt=""></div>
+            <div class="container" id="3"><img src="/static/Spotplot.svg" alt=""></div>
         </div>
 
         <div id="plot-stack">

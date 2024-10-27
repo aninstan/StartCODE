@@ -1,5 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
+from bokeh.io import export_svgs
+from bokeh.plotting import curdoc, figure, show
 
 import Simulation
 import Generert_spotPris
@@ -61,9 +63,44 @@ for i in range(startTime, endTime+1):
         hourlyPV_Production = simulation.house.Solarpanels.solcellepanel_effekt(tlist, i, location[0], simulation.house.Solarpanels.S, (simulation.temperatur(i, medianTemp[i]))[j])
         PV_Production.append(hourlyPV_Production[j])
 
-ttt = np.arange(24*31)
-
 # plt.plot(ttt, PV_Production)
-plt.plot(ttt, spotPrices)
-plt.show()
+p = figure(title="3 days PV production", 
+           x_axis_label='Hour', 
+           y_axis_label='Prod', 
+           x_range=(0, 24*3), 
+           width=1000, 
+           height=400, 
+           output_backend="svg")
 
+v = figure(title="Year", 
+           x_axis_label='Hour', 
+           y_axis_label='Spotprice', 
+           x_range=(0, 24*3), 
+           width=1000, 
+           height=400, 
+           output_backend="svg")
+
+
+
+p.background_fill_color = None
+p.border_fill_color = None
+p.line(x=np.arange(24*3), y=hourlyPV_Production, line_width=2)
+
+v.background_fill_color = None
+v.border_fill_color = None
+v.line(x=, y=spotPrices, line_width=2)
+
+p.title.text_color = "white"  
+p.xaxis.axis_label_text_color = "white"  
+p.yaxis.axis_label_text_color = "white"  
+p.xaxis.major_label_text_color = "white"
+p.yaxis.major_label_text_color = "white" 
+
+v.title.text_color = "white"
+v.xaxis.axis_label_text_color = "white"
+v.yaxis.axis_label_text_color = "white"
+v.xaxis.major_label_text_color = "white"
+v.yaxis.major_label_text_color = "white"
+
+export_svgs(p, filename="static/Pvplot.svg")
+export_svgs(p, filename="static/Spotplot.svg")
