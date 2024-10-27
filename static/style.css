@@ -64,6 +64,20 @@ input {
     background-color: var(--text-color);
     border-radius: 5px;
     padding: 0.5rem;
-    margin: 0.5rem;
+    margin: 0rem 0.5rem 0.5rem 0.5rem;
     width: fit;
+}
+
+label {
+    font-size: 0.8rem;
+    margin: 0.5rem;
+}
+
+form {
+    display: flex;
+    flex-direction: row;
+}
+
+#submit {
+    width: 100%;
 }

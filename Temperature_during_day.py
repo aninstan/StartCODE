@@ -1,6 +1,8 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
+
+
 theta = 2*np.pi/3 #faseforskyvning, maksimal temperatur inntreffer ca 14:00
 
 def temperatur_avvik(dag_i_aret):
@@ -24,8 +26,6 @@ def temperatur_avvik(dag_i_aret):
     return avvik
 
 
-
-
 def temperatur(t, dag_i_aret, temp_avg):
     A= temperatur_avvik(dag_i_aret) / 2
     mue = 0
@@ -39,6 +39,10 @@ def temperatur(t, dag_i_aret, temp_avg):
             mue=0
         else:
             mue = random_avvik_liste[i-1]
+<<<<<<< HEAD
+=======
+            # print(mue)
+>>>>>>> 897563f2376381b1f1f70aa659599feef47dee99
         random_avvik = np.random.normal(mue, 0.08)
         random_avvik_liste.append(random_avvik)
     
@@ -48,5 +52,5 @@ t = np.linspace(0,24,24*60)
 
 temp_avg = 12
 temperatur_ilop_av_dagen = temperatur(t, 200, temp_avg)
-plt.plot(t, temperatur_ilop_av_dagen)
-plt.show()
+# plt.plot(t, temperatur_ilop_av_dagen)
+# plt.show()
