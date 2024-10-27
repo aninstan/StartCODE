@@ -1,4 +1,5 @@
 import numpy as np
+import matplotlib.pyplot as plt
 
 import Simulation
 import Generert_spotPris
@@ -41,26 +42,28 @@ simulation = Simulation.Simulation(startTime, endTime, energy_label, house_area,
 energyEfficiencyConstant = simulation.house.getEnergyEfficiencyConstant() # House Area and energylabel contribution to the powerusage
 medianTemp = simulation.TemperatureSimulator() # Estimate used for calculating more accurate temperature data
 
-# Temperature data
-
-
 
 # Generated spotprices
 tlist = np.arange(0,24)
 spotPrices = []
+
 for i in range(startTime, endTime+1): # total days we want spotprices over
-    daySpotPrices = Generert_spotPris.spotpris_dagen( tlist, temperatur, Generert_spotPris.spotpris_gjennomsnitt(i)) # total values over a day, temperature, average spotprice for day
-    spotPrices += daySpotPrices
+    daySpotPrices = Generert_spotPris.spotpris_dagen(tlist, simulation.temperatur(i, medianTemp[i]), Generert_spotPris.spotpris_gjennomsnitt(i)) # total values over a day, temperature, average spotprice for day
+    for j in range(24):
+        spotPrices.append(daySpotPrices[j])
 
 # Generate PV-production
 tlist = np.arange(0,24)
 PV_Production = []
+
 for i in range(startTime, endTime+1):
-    hourlyPV_Production = simulation.house.Solarpanels.solcellepanel_effekt(tlist, i, location[0], simulation.house.Solarpanels.S, temperatur)
-    PV_Production += hourlyPV_Production
+    for j in range(24):
+        hourlyPV_Production = simulation.house.Solarpanels.solcellepanel_effekt(tlist, i, location[0], simulation.house.Solarpanels.S, (simulation.temperatur(i, medianTemp[i]))[j])
+        PV_Production.append(hourlyPV_Production[j])
 
+ttt = np.arange(24*31)
 
-
-
-
+# plt.plot(ttt, PV_Production)
+plt.plot(ttt, spotPrices)
+plt.show()
 

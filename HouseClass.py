@@ -75,7 +75,7 @@ class SolarPanel:
 
 
         # Endelig formel for estimert effekt (P)
-        P = self.Area * self.eta * self.I0 * np.sin(np.radians(h)) * (1 - skyfactor) * (1 - self.alpha * (temperature - self.T0))
+        P = self.Area * self.eta * self.I0 * np.sin(np.radians(h)) * (1 - skyfactor) * (1 - 0.004 * float(temperature - self.T0))
 
         return P
     
@@ -107,7 +107,7 @@ class House:
         # self.setPowerUsage()
 
         self.weatherData = weather.weather_forecast(self.latitude, self.longitude)
-        self.historical_weather = weather.historical_weather(cityCode)
+        self.historical_weather = weather.historical_weather(city_code)
 
     def PowerProduction(self, weatherData, date): #Time is a vector that holds the date 
         Power = []

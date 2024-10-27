@@ -56,55 +56,52 @@ class Simulation:
         
 
         # Generating weather values, specifically the temperature for each hour and cloudiness for each hour
-    def temperatur(dag_i_aret, temp_avg): #generering av temperaturer iløp av en dag
-        theta = 2*np.pi/3 #faseforskyvning, maksimal temperatur inntreffer ca 14:00
-        t = np.arrange(0,24)
+    def temperatur(self, dag_i_aret, temp_avg):  # Generating temperatures throughout the day
+        theta = 2 * np.pi / 3  # Phase shift, maximum temperature occurs around 14:00
+        t = np.arange(0, 24)
 
-        #avvik mellom maksimal og minimal temperatur iløp av dagen:
-        maks_avvik = 10 # 
-        min_avvik = 3   
+        # Deviation between maximum and minimum temperature throughout the day
+        maks_avvik = 10
+        min_avvik = 3
         gjennomsnitt_avvik = (maks_avvik + min_avvik) / 2
-        avvik = gjennomsnitt_avvik + A * np.sin(2 * np.pi * (dag_i_aret - 172) / 365)
-        A = avvik/2 # Amplitude (halvparten av differansen mellom maks og min)
+        amplitude = (maks_avvik - min_avvik) / 2
+        avvik = gjennomsnitt_avvik + amplitude * np.sin(2 * np.pi * (dag_i_aret - 172) / 365)
+        A = avvik / 2  # Amplitude (half of the difference between max and min)
 
-        mue = 0 #initial forventet avvik
-        T = 24*60  #minutter i døgnet
-        temp_uten_stoy = A*np.sin(t*2*np.pi/24 - theta) + temp_avg #utregning av temperatur uten støy
+        mue = 0  # Initial expected deviation
+        T = 24  # Minutes in a day
+        temp_uten_stoy = A * np.sin(t * 2 * np.pi / 24 - theta) + temp_avg  # Calculation of temperature without noise
         random_avvik_liste = []
 
-        #generere liste med avvik fra normalfordeling
         for i in range(T):
-            if(i==0):
-                mue=0
+            if i == 0:
+                mue = 0
             else:
-                mue = random_avvik_liste[i-1]
+                mue = random_avvik_liste[i - 1]
             random_avvik = np.random.normal(mue, 0.08)
             random_avvik_liste.append(random_avvik)
-        temp_list_minutt = temp_uten_stoy + random_avvik_liste #temperaturliste for hvert minutt
-        temp_list_hour = [] #temperaturlist for hver time
-        for i in range(24):
-            temp_list_hour.append(temp_list_minutt[i*60])
+
+        temp_list_minutt = temp_uten_stoy + random_avvik_liste  # Temperature list for each minute
+        temp_list_hour = [float(temp_list_minutt[i]) for i in range(24)]  # Convert to regular floats for each hour
+
         return temp_list_hour
 
 
-
-
-        # Initializing all the buildings that is inside the simulation
-    def generate_spot_prices(self, temp_avg = np.arrange(10,10, 365)):
-        temperature = []
-        spot_prices = []
+    #     # Initializing all the buildings that is inside the simulation
+    # def generate_spot_prices(self, temp_avg = np.arange(10,10, 365)):
+    #     temperature = []
+    #     spot_prices = []
         
-        hours = np.arange(0,24, 1)
-        for i in range(self.StartTime, self.EndTime):
-            if (i+1)%60 == 0:
-                temperature.append(Temperature_during_day.temperatur(hours, i, temp_avg))
+    #     hours = np.arange(0,24, 1)
+    #     for i in range(self.StartTime, self.EndTime):
+    #         if (i+1)%60 == 0:
+    #             temperature.append(self.temperatur(i, temp_avg))
         
-        for i in range(self.EndTime-self.StartTime):
-            spot_pris = Generert_spotPris.spotpris(hours, temperature, i)
-            spot_prices.append(spot_pris)
-        return spot_prices
-        for i in range(self.numhouses):
-            self.houses[i] = HouseClass.House()
+    #     for i in range(self.EndTime-self.StartTime):
+    #         spot_pris = Generert_spotPris.spotpris(temperature, i)
+    #         spot_prices.append(spot_pris)
+
+    #     return spot_prices, temperature
     
     def EnergyConsumptionGenerator(self):
         # First gnerating the average power usage for each day of the year. 
@@ -165,15 +162,15 @@ class Simulation:
 
 
     
-simulation = Simulation()
+# simulation = Simulation()
 
-xliste = simulation.timelist
-liste = simulation.EstimatedGeneralPower
-fig, ax = plt.subplots()
-ax.plot(xliste,liste)
-plt.show()
+# xliste = simulation.timelist
+# liste = simulation.EstimatedGeneralPower
+# fig, ax = plt.subplots()
+# ax.plot(xliste,liste)
+# plt.show()
 
-print(len(data))
+# print(len(data))
 
 # data = np.array([14.64, 14.9, 15.18, 15.51, 16.97, 18.88, 18.35, 17.46, 18.52, 18.35, #Holds the Power in KW
 #         18.35, 18.53, 17.83, 17.32, 17.97, 17.85, 17.78, 18.31, 18.7, 
