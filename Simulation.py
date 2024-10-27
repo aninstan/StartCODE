@@ -1,11 +1,9 @@
 import numpy as np
 import HouseClass
-import solcellepanel_effekt
-import FourierTransform
+import functions
 import pandas as pd
 import random as rd
 import pandas as pd
-
 import Temperature_during_day
 
 
@@ -28,6 +26,15 @@ data = np.array([14.64, 14.9, 15.18, 15.51, 16.97, 18.88, 18.35, 17.46, 18.52, 1
         12.67, 12.63, 13.29, 13.58, 13.43, 13.62, 15.07, 15.9, 15.01, 
         15.84]) * ConversionVariable
 
+
+# Since our data contains values for two periods (two years) we choose to look at the average when we later calculate the fourierseries
+average_data = []
+for n in range(int(len(data)/2)):
+    data1 = data[n] 
+    data2 = data[n+52]
+    average_data.append((data1+data2)/2) 
+data = average_data
+
 class Simulation:
     time, day, year = 12, 1, 2024
     temp, clouds = [], []
@@ -39,10 +46,11 @@ class Simulation:
     DailyBasis = [] # Holds the average power (Watts) a household uses based on the day of the year
 
 
-    def __init__(self, locations=None, areas=None, energylabels=None, solarpanelareas=None):
+    def __init__(self, StartTime = 0, EndTime = 31, energy_label="E", house_area=108, house_placement=None, family_size=2, CurrentRegion = "NO3", SolarPanelArea = 10,
+                eta = 0.2, I0 = 1000, S = 0.3, alpha = 0.004, T = 10, T0 = 25):
         
         # Generating the Average Temperature for each day of the year. 
-        self.EnergyConsumptionGenerator()
+        # self.EnergyConsumptionGenerator()
 
         # Initializing all the buildings that is inside the simulation
 
@@ -51,8 +59,8 @@ class Simulation:
     
     def EnergyConsumptionGenerator(self):
         # Generating the average power usage for each day of the year. 
-        self.PowerConsumption = FourierTransform.fourier_series(data, 10, 365, self.timelist) # Holds the average Power usage of all days
-        StocasticVariation = data - FourierTransform.fourier_series(data,10, 50, self.timelist)
+        self.PowerConsumption = functions.fourier_series(data, 10, 365, self.timelist) # Holds the average Power usage of all days
+        StocasticVariation = data - functions.fourier_series(data,10, 50, self.timelist)
         for i in range(len(self.DailyBasis)):
             randVarind = rd.randint(0,len(self.DailyBasis))
             self.PowerConsumption[i] += StocasticVariation[randVarind] # Simulates and generates the difference that is from the seemingly periodic part of the "data" curve
@@ -63,7 +71,7 @@ class Simulation:
             time = data['Hour'].values
             power_usage = data['PowerConsumption'].values
 
-
+    #YOOOOO!
     
 
 
@@ -72,7 +80,7 @@ class Simulation:
             df = pd.read_csv("mean_temperatures.txt")
 
             tList = np.arange(len(df[" Mean Temperature"]))
-            PureSinus = FourierTransform.fourier_series(df[" Mean Temperature"],1 , len(df[" Mean Temperature"]), tList)
+            PureSinus = functions.fourier_series(df[" Mean Temperature"],1 , len(df[" Mean Temperature"]), tList)
             VariationDistribution = PureSinus - df[" Mean Temperature"]
             GeneratedYearlyTemp = PureSinus
             for i in range(len(VariationDistribution)):
@@ -82,15 +90,8 @@ class Simulation:
             
             StartDay, EndDay = HouseClass.date_to_days(df["Date"].iloc[0]), HouseClass.date_to_days(df["Date"].iloc[-1])
             return GeneratedYearlyTemp
-            print(StartDay, EndDay)
+            
+            
 
     def WeatherSimulator(self, house):
         a =2
-
-    
-
-
-
-     
-
-simulation = Simulation()
