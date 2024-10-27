@@ -1,4 +1,7 @@
+import numpy as np
+
 import Simulation
+import Generert_spotPris
 ### Antar at anine vil oppdatere disse variablene basert på input fra nettside, hvis ikke gitt, sett til None, så vil defaultparametre bli brukt ###
 
 # House:
@@ -15,7 +18,7 @@ alpha = 0.004 # Temperature coefficient.
 T0 = 25 # Reference temperature.
 
 # Location and time
-startTime = 0 # Startday from 1-365
+startTime = 1 # Startday from 1-365
 endTime = 31 # Endday from 1-365
 
 locations = {
@@ -32,6 +35,31 @@ location = locations[2] # Data about location based of chosen location
 
 simulation = Simulation.Simulation(startTime, endTime, energy_label, house_area, (location[0], location[1]), 
                                    family_size, location[2], solarpanelArea, eta, I0, None, alpha, None, T0)
+
+
+# Konstant
+energyEfficiencyConstant = simulation.house.getEnergyEfficiencyConstant() # House Area and energylabel contribution to the powerusage
+medianTemp = simulation.TemperatureSimulator() # Estimate used for calculating more accurate temperature data
+
+# Temperature data
+
+
+
+# Generated spotprices
+tlist = np.arange(0,24)
+spotPrices = []
+for i in range(startTime, endTime+1): # total days we want spotprices over
+    daySpotPrices = Generert_spotPris.spotpris_dagen( tlist, temperatur, Generert_spotPris.spotpris_gjennomsnitt(i)) # total values over a day, temperature, average spotprice for day
+    spotPrices += daySpotPrices
+
+# Generate PV-production
+tlist = np.arange(0,24)
+PV_Production = []
+for i in range(startTime, endTime+1):
+    hourlyPV_Production = simulation.house.Solarpanels.solcellepanel_effekt(tlist, i, location[0], simulation.house.Solarpanels.S, temperatur)
+    PV_Production += hourlyPV_Production
+
+
 
 
 

@@ -17,7 +17,7 @@ def spotpris_dagen(t, T, gjennomsnitt): #generering av spotpriser iløpet av dag
             mue = 1/(min(abs(t[i]-8), abs(t[i]-19))+1)*0.6
         
         if(T<15):
-            mue*=(15-T)*0.2
+            mue*=(15-T)*3
         random_avvik = np.random.normal(mue, 0.08)
         spotpris_dagen.append(random_avvik)
 
@@ -30,8 +30,11 @@ def spotpris(t, T, dag): #spotpris, basert på tid på dagen, temperatur og dage
      spotpris = spotpris_dagen(t, T, gjennomsnitt)
      return spotpris
 
-# tid = np.linspace(0,24,24)
-# temperatur = 0
-# gjennomsnitt = 1
+tid = np.linspace(0,24,24)
+temperatur = -10
+gjennomsnitt = spotpris_gjennomsnitt(1)
+
+
+print(spotpris_dagen(tid, temperatur, gjennomsnitt))
 # plt.plot(tid, spotpris_dagen(tid, temperatur, gjennomsnitt))
 # plt.show()

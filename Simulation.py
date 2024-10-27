@@ -46,26 +46,26 @@ class Simulation:
     house = None
 
     def __init__(self, StartTime = 0, EndTime = 31, energy_label="E", house_area=108, house_placement=None, family_size=2, CurrentRegion = "NO3", SolarPanelArea = 10,
-                 eta = 0.2, I0 = 1000, S = 0.3, alpha = 0.004, T = 10, T0 = 25):
+                 eta = 0.2, I0 = 1000, S = 0.3, alpha = 0.004, T = 10, T0 = 25, cityCode = "1-92416"):
         
-        self.house = HouseClass.house(energy_label, house_area, house_placement, family_size, CurrentRegion, SolarPanelArea,
-                eta, I0, S, alpha, T, T0)
+        self.house = HouseClass.House(energy_label, house_area, house_placement, family_size, CurrentRegion, SolarPanelArea,
+                eta, I0, S, alpha, T, T0, cityCode = "1-92416", StartTime = 0, EndTime = 31)
         self.StartTime = StartTime
         self.EndTime = EndTime
                  
         
         # Generating values for how much energy is used each hour
 
-        self.EnergyConsumptionGenerator()
+        # self.EnergyConsumptionGenerator()
 
         # Generating weather values, specifically the temperature for each hour and cloudiness for each hour
         
     def EnergyConsumptionGenerator(self):
         # Generating the average power usage for each day of the year. 
         DailyMeanPowerConsumption = functions.fourier_series(data, 10, 365, self.timelist) # Holds the average Power usage of all days
-        StocasticVariation = data - functions.fourier_series(data, 10, 50, np.linspace(0,50,))
-        for i in range(len(self.DailyBasis)):
-            randVarind = rd.randint(0,len(self.DailyBasis))
+        StocasticVariation = data - functions.fourier_series(data, 10, 50, np.linspace(0,50, 55))
+        for i in range(len(DailyMeanPowerConsumption)):
+            randVarind = rd.randint(0,len(DailyMeanPowerConsumption))
             DailyMeanPowerConsumption[i] += StocasticVariation[randVarind] # Simulates and generates the difference that is from the seemingly periodic part of the "data" curve
 
             #Making a dataset that has a power usage variation throughout the day, taking the average power usage for that day into account

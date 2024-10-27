@@ -104,5 +104,5 @@ def historical_weather(loc):
 
 
 # Example usage
-# print(historical_weather("1-211102"))
+# print(historical_weather("1-211102")["date"].iloc[120])
 # print(weather_forecast(63.45, 10.42))

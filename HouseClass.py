@@ -54,6 +54,7 @@ class SolarPanel:
         self.alpha = alpha # Temperaturkoeffisient
         self.T = T # Aktuell temperatur i omgivelsene 
         self.T0 = T0 # Referansetemperatur
+        self.S = S # Cloud Intensity
 
 
     def solcellepanel_effekt(self, tlist, day, latitude, skyfactor, temperature): #målt i watt
@@ -70,7 +71,7 @@ class SolarPanel:
         # Beregn solhøyde (h)
                             # h = np.degrees(np.arcsin(np.sin(np.radians(phi)) * np.sin(np.radians(delta)) +
                             # np.cos(np.radians(phi)) * np.cos(np.radians(delta)) * np.cos(np.radians(omega))))
-# Hva skjer med np.degrees og ikke np.maximum i den ene filen fra tidligere?
+        # Hva skjer med np.degrees og ikke np.maximum i den ene filen fra tidligere?
 
 
         # Endelig formel for estimert effekt (P)
@@ -87,7 +88,7 @@ class House:
 
 
     def __init__(self, energy_label="E", house_area=108, house_placement=None, family_size=2, CurrentRegion = "NO3", SolarPanelArea = 10,
-                 eta = 0.2, I0 = 1000, S = 0.3, alpha = 0.004, T = 10, T0 = 25):
+                  eta = 0.2, I0 = 1000, S = 0.3, alpha = 0.004, T = 10, T0 = 25, cityCode = "1-92416", StartTime = 0, EndTime = 31):
         
         if house_placement is None:
             house_placement = [0, 0]  # Avoid mutable default argument
@@ -102,11 +103,11 @@ class House:
         self.PowerConditionsFactor = 1.0  # Specify the type for clarity
         self.CurrentRegion = CurrentRegion      
         self.Solarpanels = SolarPanel(SolarPanelArea,eta, I0, S, alpha, T, T0)
-        self.Solarpanels = SolarPanel(SolarPanelArea,eta, I0, S, alpha, T, T0)
 
-        self.setPowerUsage()
+        # self.setPowerUsage()
 
         self.weatherData = weather.weather_forecast(self.latitude, self.longitude)
+        self.historical_weather = weather.historical_weather(cityCode)
 
     def PowerProduction(self, weatherData, date): #Time is a vector that holds the date 
         Power = []
@@ -118,17 +119,23 @@ class House:
             Time = weatherData['time'].iloc[i]
             Power.append(self.solcellepanel_effekt(Time, day, self.latitude, Cloudiness, Temperature))
         return Power
+    
+    # def spesificPowerProduction(self, historical_weather, StartTime, EndTime):
+    #     StartTime += 120
+    #     EndTime += 120 # the data goes 13 months back in time and 120 will make it so that 0 = 01.01.20xx
+    #     if StartTime > 360:
+    #         StartTime -= 360
+    #     if EndTime > 360:
+    #         EndTime -= 360
 
 
-    def setPowerUsage(self):
+
+    def getEnergyEfficiencyConstant(self):
             ClosestAreaIndex = (np.abs(self.house_area - AREA_INCREMENTS)).argmin()  # Access the global constant
             self.PowerConditionsFactor = energy_data[self.energy_label][AREA_INCREMENTS[ClosestAreaIndex]] / self.AVERAGE_ENERGY # factor: Energy efficiency compared to average household
+            return self.PowerConditionsFactor
 
 
 
-
-
-# Create an instance of House
-house = House()
 
 
