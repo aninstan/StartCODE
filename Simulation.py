@@ -1,12 +1,10 @@
 import numpy as np
 import HouseClass
 import functions
-import functions
-import pandas as pd
 import random as rd
 import pandas as pd
-import Temperature_during_day
-
+# import Temperature_during_day
+import matplotlib.pyplot as plt
 
 import HouseClass
 
@@ -34,54 +32,62 @@ for n in range(int(len(data)/2)):
     data1 = data[n] 
     data2 = data[n+52]
     average_data.append((data1+data2)/2) 
-data = average_data
+
+average_data = average_data[0:len(average_data)-3] # For practical purposes we make this excactly 52 weeks long.
+
 
 class Simulation:
     temp, clouds = [], []
-    numhouses = 1
-    houses = [None] * numhouses
-    StartTime, EndTime = 0, 365 # Holds the start and end time of the simulation in days
-    timelist = np.linspace(StartTime, EndTime, (EndTime-StartTime)*24)
     HourlyPowerConsumption = [] # Holds the watt used each hour
-    house = None
 
-    def __init__(self, StartTime = 0, EndTime = 31, energy_label="E", house_area=108, house_placement=None, family_size=2, CurrentRegion = "NO3", SolarPanelArea = 10,
-                 eta = 0.2, I0 = 1000, S = 0.3, alpha = 0.004, T = 10, T0 = 25):
+    def __init__(self, StartTime = 1, EndTime = 31, energy_label="E", house_area=108, house_placement=[63.4468,10.4219], family_size=2, CurrentRegion = "NO3", SolarPanelArea = 10,
+                 eta = 0.2, I0 = 1000, S = 0.3, alpha = 0.004, T = 10, T0 = 25, city_code = "1-92416"):
         
-        self.house = HouseClass.house(energy_label, house_area, house_placement, family_size, CurrentRegion, SolarPanelArea,
-                eta, I0, S, alpha, T, T0)
+        self.house = HouseClass.House(energy_label, house_area, house_placement, family_size, CurrentRegion, SolarPanelArea,
+                eta, I0, S, alpha, T, T0, city_code)
         self.StartTime = StartTime
         self.EndTime = EndTime
-                 
+        self.timelist = np.arange((StartTime-1)*24, EndTime*24, 1)
+
         
         # Generating values for how much energy is used each hour
 
         self.EnergyConsumptionGenerator()
+        
 
         # Generating weather values, specifically the temperature for each hour and cloudiness for each hour
         
     def EnergyConsumptionGenerator(self):
-        # Generating the average power usage for each day of the year. 
-        DailyMeanPowerConsumption = functions.fourier_series(data, 10, 365, self.timelist) # Holds the average Power usage of all days
-        StocasticVariation = data - functions.fourier_series(data, 10, 50, np.linspace(0,50,))
-        for i in range(len(self.DailyBasis)):
-            randVarind = rd.randint(0,len(self.DailyBasis))
-            DailyMeanPowerConsumption[i] += StocasticVariation[randVarind] # Simulates and generates the difference that is from the seemingly periodic part of the "data" curve
+        # First gnerating the average power usage for each day of the year. 
+        DayBasedTimeList = np.linspace(self.StartTime,self.EndTime,self.EndTime-self.StartTime) # Same as self.timelist, but only holds one value per da
+        DailyMeanPowerConsumption = functions.fourier_series(average_data, 4, 365, DayBasedTimeList ) # Holds the average Power usage of all days thats between self.starttime and self.endtime
+        
+        
+        #Then including noise based on the probability distribution generated through StocasticVariation
+        # Simulates and generates the difference that is from the seemingly periodic part of the "data" curve
+        StocasticVariation = average_data - functions.fourier_series(average_data, 4, 52, np.linspace(0,52,len(average_data))) 
+        for i in range(len(DailyMeanPowerConsumption)):
+            randVarind = (rd.randint(0,len(StocasticVariation)-1))
+            DailyMeanPowerConsumption[i] += StocasticVariation[randVarind] 
+        
+        #Making a dataset that has a power usage variation throughout the day, taking the average power usage for that day into account
+        #Daily Variation Set comes only from three months during winter, which is why we choose to only use it for variation and not average temperature during the day
 
-            #Making a dataset that has a power usage variation throughout the day, taking the average power usage for that day into account
-            #Daily Variation Set comes only from three months during winter, which is why we choose to only use it for variation and not average temperature during the day
-            dailyvar = pd.read_csv("year_data_flattened.csv")
-            time = data['Hour'].values
-            self.timelist = time
-            power_usage = data['PowerConsumption'].values
-            HourlyPowerConsumption = []
-            for i, dailyvalue in enumerate(DailyMeanPowerConsumption):
-                 for j in range(24):
-                    HourlyPowerConsumption.append(dailyvalue + power_usage[i*j-1])
-            self.HourlyPowerConsumption = HourlyPowerConsumption
-            
+        dailyvar = pd.read_csv("year_data_flattened.csv")
+        time = dailyvar['Hour'].values
+        power_variation = dailyvar['PowerConsumption'].values
+        power_variation = power_variation[(self.StartTime-1) * 24:self.EndTime*24] # We only use the hours that is between the Start and End Days
+        HourlyPowerConsumption = []
 
-    
+        for i, hourlyvariation in enumerate(power_variation):
+            if (i) % 24 == 0:
+                DailyIndex = int((i)/24)
+                print(DailyIndex)
+                DailyValue = DailyMeanPowerConsumption[DailyIndex-1]
+            HourlyPowerConsumption.append(DailyValue + hourlyvariation)
+
+        self.HourlyPowerConsumption = HourlyPowerConsumption
+
 
 
     def TemperatureSimulator(self):
@@ -96,10 +102,12 @@ class Simulation:
             for i in range(len(VariationDistribution)):
                 randInd = rd.randint(0,len(VariationDistribution)-1) 
                 GeneratedYearlyTemp[randInd] += VariationDistribution[randInd]/2
-
+            
             
             StartDay, EndDay = HouseClass.date_to_days(df["Date"].iloc[0]), HouseClass.date_to_days(df["Date"].iloc[-1])
             return GeneratedYearlyTemp
 
     def WeatherSimulator(self, house):
         a =2
+
+
