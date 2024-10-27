@@ -4,6 +4,12 @@ import solcellepanel_effekt
 import FourierTransform
 import pandas as pd
 import random as rd
+import pandas as pd
+
+import Temperature_during_day
+import 
+
+
 import HouseClass
 
 TotHouseHolds = 2.6 * 10**6
@@ -27,16 +33,54 @@ class Simulation:
     time, day, year = 12, 1, 2024
     month, textday = "january", "1"
     temp, clouds = [], []
-    numhouses, timestep = 10**2, 4 # 24 needs to be divisible by timestep
-    houses = np.zeros(numhouses)
+    numhouses = 1
+    houses = [None] * numhouses
+    StartTime, EndTime = 0, 365 # Holds the start and end time of the simulation in days
+    timelist = np.linspace(StartTime, EndTime, (EndTime-StartTime))
+    PowerConsumption = [] # Holds the average power (Watts) a household uses based on the day of the year
+    DailyBasis = [] # Holds the average power (Watts) a household uses based on the day of the year
 
-    timelist = np.arange(0,len(data),24/ timestep * len(data))
-    EstimatedGeneralPower = FourierTransform.fourier_series(data, 10, timelist, timestep)
+    def generate_spot_prices(self):
 
 
-    def _init_(self,locations = None,areas = None,energylabels = None, solarpanelareas = None):
+
+    def __init__(self, locations=None, areas=None, energylabels=None, solarpanelareas=None):
+        
+        # Generating the Average Temperature for each day of the year. 
+        self.DailyBasis = FourierTransform.fourier_series(data, 1, 365, self.timelist) # Holds the average Power usage of all days
+        StocasticVariation = data - FourierTransform.fourier_series(data,10, 50, self.timelist)
+        for i in range(len(self.DailyBasis)):
+            randVarind = rd.randint(0,len(self.DailyBasis))
+            self.DailyBasis[i] += StocasticVariation[randVarind] # Simulates and generates the difference that is from the seemingly periodic part of the "data" curve
+
+        # Initializing all the buildings that is inside the simulation
+
         for i in range(self.numhouses):
             self.houses[i] = HouseClass.House()
+    
+    def EnergyConsumptionGenerator(self):
+        # Generating the average power usage for each day of the year. 
+        self.PowerConsumption = FourierTransform.fourier_series(data, 10, 365, self.timelist) # Holds the average Power usage of all days
+        StocasticVariation = data - FourierTransform.fourier_series(data,10, 50, self.timelist)
+        for i in range(len(self.DailyBasis)):
+            randVarind = rd.randint(0,len(self.DailyBasis))
+            self.PowerConsumption[i] += StocasticVariation[randVarind] # Simulates and generates the difference that is from the seemingly periodic part of the "data" curve
+
+        #Making a dataset that has a power usage variation throughout the day, taking the average power usage for that day into account
+            #Daily Variation Set comes only from three months during winter, which is why we choose to only use it for scaling
+            dailyvar = pd.read_csv("year_data_flattened.csv")
+            time = data['Hour'].values
+            power_usage = data['PowerConsumption'].values
+
+    def WeatherSimulationGenerator(self):
+        []
+
+
+
+
+
+    
+
 
 
     def Simulator(self):

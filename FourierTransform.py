@@ -26,21 +26,21 @@ data = np.array([ 17.32, 17.97, 17.78, 18.31, 18.7,
         12.67, 12.63, 13.29, 13.58, 13.65, 14.64, 14.9, 15.18, 15.51, 16.97, 18.88, 18.35, 17.46, 18.52, 18.35, #Holds the Power in KW
         18.35, 18.53, 17.83]) * ConversionVariable
 
-
+#finner effektforbruk hver uke i året basert på gjennomsnittet iløpet av 2 år
 new_data=[]
-avvik = []
 for n in range(int(len(data)/2)):
     data1 = data[n] 
     data2 = data[n+52]
     new_data.append((data1+data2)/2) 
-    avvik.append(abs(data1-data2))
+
+data = new_data
 
 
 
 
 
 
-def fourier_series(data, N,T, timelist):
+def fourier_series(data, N,T, timelist): #finner en fourierrekke for dataen.
     a0 = np.average(data) # Equilibrium component.
     returnarr = np.zeros(len(timelist)) + a0
     temptlist = np.linspace(0,T,len(data))
@@ -56,14 +56,14 @@ def fourier_series(data, N,T, timelist):
     return returnarr
 # data = sim.data
 
-timelist1=np.arange(0,len(data) * 7)
-timelist2=np.arange(0,len(new_data) * 7*2)
+# timelist1=np.arange(0,len(data) * 7)
+# timelist2=np.arange(0,len(new_data) * 7*2)
 
-T1=365*2
-T2 = 365
-n = 1
-returnarr1 = fourier_series(data, n, T1, timelist1)
-returnarr2 = fourier_series(new_data, n, T2, timelist2)
+# T1=365*2
+# T2 = 365
+# n = 1
+# returnarr1 = fourier_series(data, n, T1, timelist1)
+# returnarr2 = fourier_series(new_data, n, T2, timelist2)
 
 
 
