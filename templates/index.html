@@ -7,26 +7,25 @@
 
     <body>
         <div class="container">
+            <nav>
+                <div>Simulate Single Home</div>
+                <div>Simulate Multiple Homes</div>
+            </nav>
             <h1>app</h1>
             <form action="/process_form" method="POST">
                 <div>
-                    <label for="Dag">Dag</label>
-                    <input type="number" name="Dag">
-                    <label for="Måned">Måned</label>
-                    <input type="number" name="Måned">
-                    <label for="År">År</label>
-                    <input type="number" name="År">
-                    <input type="submit" id="submit">
-                </div>
-
-                <div>
-                    <label for="Energimerke">Energimerke</label>
+                    <h2>Data</h2>
+                    <label for="Start">Startdato: (YYYY-MM-DD)</label>
+                    <input name="Start">
+                    <label for="Slutt">Sluttdato: (YYYY-MM-DD)</label>
+                    <input name="Slutt">
+                    <label for="Energimerke">Energimerke:</label>
                     <input name="Energimerke">
-                    <label for="Kvadratmeter">Kvadratmeter</label>
+                    <label for="Kvadratmeter">Kvadratmeter:</label>
                     <input type="number" name="Kvadratmeter">
-                    <label for="Område">Område</label>
+                    <label for="Område">Område:</label>
                     <input type="search" list="options" name="Område">
-                    <label for="Beboere">Beboere</label>
+                    <label for="Beboere">Beboere:</label>
                     <input type="number" name="Beboere">
                 </div>
 
@@ -39,16 +38,18 @@
                 </datalist>
                 
                 <div>
-                    <label for="Solcelleareal">Solcelleareal</label>
+                    <h2>Solcelle</h2>
+                    <label for="Solcelleareal">Solcelleareal:</label>
                     <input name="Solcelleareal">
-                    <label for="Virkningsgrad">Virkningsgrad</label>
+                    <label for="Virkningsgrad">Virkningsgrad:</label>
                     <input name="Virkningsgrad">
-                    <label for="Maks Solinnstråling">Maks Solinnstråling</label>
+                    <label for="Maks Solinnstråling">Maks Solinnstråling:</label>
                     <input name="Maks Solinnstråling">
-                    <label for="Temperaturkoeffisient">Temperaturkoeffisient</label>
+                    <label for="Temperaturkoeffisient">Temperaturkoeffisient:</label>
                     <input name="Temperaturkoeffisient">
-                    <label for="Referansetemperatur">Referansetemperatur</label>
+                    <label for="Referansetemperatur">Referansetemperatur:</label>
                     <input name="Referansetemperatur">
+                    <input type="submit" id="submit">
                 </div>
 
                 
@@ -57,9 +58,15 @@
         </div>
 
         <div id="plot-stack">
-            <div class="container" id="1">a</div>
+            <div class="container" id="1"><img src="/static/plot.svg" alt=""></div>
             <div class="container" id="2">a</div>
             <div class="container" id="3">a</div>
+        </div>
+
+        <div id="plot-stack">
+            <div class="container" id="4">a</div>
+            <div class="container" id="5">a</div>
+            <div class="container" id="6">a</div>
         </div>
     </body>
 </html>  

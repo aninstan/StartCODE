@@ -4,6 +4,7 @@
     --backdrop-color: #121628;
     --text-color: #cdc6c6;
     --bg-color: #1d2547;
+    --blue: #3992ff;
 }
 
 * {
@@ -46,7 +47,7 @@ body {
     background-color: var(--bg-color);
     border-radius: 10px;
     height: 100%;
-    width: 70%;
+    width: 40%;
     filter: drop-shadow(3px 3px 3px rgba(0, 0, 0, 0.2));
 }
 
@@ -76,8 +77,53 @@ label {
 form {
     display: flex;
     flex-direction: row;
+    height: 100%;
 }
 
 #submit {
+    width: 91.5%;
+    margin-top: 1.7rem;
+    padding: 0.5rem;
+}
+
+#submit:hover {
+    background-color: var(--blue);
+    color: var(--text-color);
+    cursor: pointer;
+}
+
+.container img {
     width: 100%;
+    height: 100%;
+    border-radius: 10px;
+}
+
+nav{
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+    position: sticky;
+    padding: 1rem;
+    gap: 1rem;
+    top: 0;
+    width: 100%;
+    height: fit-content;
+    justify-content: space-around;
+}
+
+nav div {
+    gap: 1rem;
+    padding: 0.5rem 1rem;
+    border-radius: 10px;
+    background-color: var(--text-color);
+    color: var(--backdrop-color);
+    font-size: 0.8rem;
+    width: 100%;
+    text-align: center;
+}
+
+nav div:hover {
+    background-color: var(--blue);
+    color: var(--text-color);
+    cursor: pointer;
 }
