@@ -7,11 +7,47 @@
 
     <body>
         <div class="container">
-            <p>app</p>
+            <h1>app</h1>
             <form method="POST">
-                <input name="kWh">
-                <input name="kWh">
-                <input name="kWh">
+                <div>
+                    <label for="Dag">Dag</label>
+                    <input type="number" name="Dag">
+                    <label for="Måned">Måned</label>
+                    <input type="number" name="Måned">
+                    <label for="År">År</label>
+                    <input type="number" name="År">
+                </div>
+
+                <div>
+                    <label for="Energimerke">Energimerke</label>
+                    <input name="Energimerke">
+                    <label for="Kvadratmeter">Kvadratmeter</label>
+                    <input type="number" name="Kvadratmeter">
+                    <label for="Område">Område</label>
+                    <input type="search" list="options" name="Område">
+                </div>
+
+                <datalist id="options">
+                    <option value="Oslo"></option>
+                    <option value="Bergen"></option>
+                    <option value="Trondheim"></option>
+                    <option value="Stavanger"></option>
+                    <option value="Drammen"></option>
+                </datalist>
+                
+                <div>
+                    <label for="Solcelleareal">Solcelleareal</label>
+                    <input name="Solcelleareal">
+                    <label for="Virkningsgrad">Virkningsgrad</label>
+                    <input name="Virkningsgrad">
+                    <label for="Maks Solinnstråling">Maks Solinnstråling</label>
+                    <input name="Maks Solinnstråling">
+                    <label for="Temperaturkoeffisient">Temperaturkoeffisient</label>
+                    <input name="Temperaturkoeffisient">
+                    <label for="Referansetemperatur">Referansetemperatur</label>
+                    <input name="Referansetemperatur">
+                </div>
+
                 <input type="submit">
             </form>
             

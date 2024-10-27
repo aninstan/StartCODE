@@ -67,3 +67,8 @@ input {
     margin: 0.5rem;
     width: fit;
 }
+
+form {
+    display: flex;
+    flex-direction: row;
+}
