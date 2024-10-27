@@ -31,7 +31,7 @@ location = locations[2] # Data about location based of chosen location
 ### Start Code #### (pun intended)
 
 simulation = Simulation.Simulation(startTime, endTime, energy_label, house_area, (location[0], location[1]), 
-                                   family_size, location[2], solarpanelArea, "remove", eta, I0, None, alpha, None, T0)
+                                   family_size, location[2], solarpanelArea, eta, I0, None, alpha, None, T0)
 
 
 
