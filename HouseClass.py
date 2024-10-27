@@ -35,17 +35,15 @@ month_days = {
 
 
 def date_to_days(df): #konverterer dato til dag i året
-    date = int(df[5:7])  
-    month = int(df[8:10])
-    DayNumber = 0
+    month = int(df[5:7])  
+    date = int(df[8:10]) 
+    temp_måned_dager = 0
 
+    for i in range(1, month):
+        temp_måned_dager += month_days[i]
 
-    for i in range(1, month+1):
-        DayNumber += month_days[i]
-
-    DayNumber += date
-    return DayNumber
-
+    antall_dager = date + temp_måned_dager
+    return antall_dager
 class SolarPanel:
 
     def __init__(self, A = 1, eta = 0.2, I0 = 1000, phi = 60, S = 0.3, alpha = 0.004, T = 10, T0 = 25):
@@ -68,18 +66,28 @@ class SolarPanel:
         # Beregn solhøyde (h)
         h = np.maximum(0,np.degrees(np.arcsin(np.sin(np.radians(latitude)) * np.sin(np.radians(delta)) +
             np.cos(np.radians(latitude)) * np.cos(np.radians(delta)) * np.cos(np.radians(omega)))))
+        
+        # Beregn solhøyde (h)
+                            # h = np.degrees(np.arcsin(np.sin(np.radians(phi)) * np.sin(np.radians(delta)) +
+                            # np.cos(np.radians(phi)) * np.cos(np.radians(delta)) * np.cos(np.radians(omega))))
+# Hva skjer med np.degrees og ikke np.maximum i den ene filen fra tidligere?
+
 
         # Endelig formel for estimert effekt (P)
         P = self.Area * self.eta * self.I0 * np.sin(np.radians(h)) * (1 - skyfactor) * (1 - self.alpha * (temperature - self.T0))
 
         return P
+    
+
 
 
 class House:
     #OOOPS: house_area is just the part of the house that is actually heated.
+    #OOOPS: house_area is just the part of the house that is actually heated.
+    AVERAGE_ENERGY = energy_data["E"][100] # Based on average energy label and average area for a household
 
 
-    def __init__(self, energy_label="G", house_area=124, house_placement=None, family_size=2, CurrentRegion = "NO3", SolarPanelArea = 10,
+    def __init__(self, energy_label="E", house_area=108, house_placement=None, family_size=2, CurrentRegion = "NO3", SolarPanelArea = 10,
                  A = 1, eta = 0.2, I0 = 1000, S = 0.3, alpha = 0.004, T = 10, T0 = 25):
         
         if house_placement is None:
@@ -112,10 +120,10 @@ class House:
         return Power
 
 
-
     def setPowerUsage(self):
-        ClosestAreaIndex = (np.abs(self.house_area - AREA_INCREMENTS)).argmin()  # Access the global constant
-        self.PowerUsage = energy_data[self.energy_label][AREA_INCREMENTS[ClosestAreaIndex]] * self.PowerConditionsFactor
+            ClosestAreaIndex = (np.abs(self.house_area - AREA_INCREMENTS)).argmin()  # Access the global constant
+            self.PowerConditionsFactor = energy_data[self.energy_label][AREA_INCREMENTS[ClosestAreaIndex]] / self.AVERAGE_ENERGY # factor: Energy efficiency compared to average household
+
 
 
 

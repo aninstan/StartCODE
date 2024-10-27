@@ -2,10 +2,8 @@
 import matplotlib.pyplot as plt
 from matplotlib.gridspec import GridSpec
 from scraper import fetch_nordpool_prices
-from optimize_battery_schedule import optimize_battery_schedule
-import unoptimized_battery_schedule
-import numpy as np
 
+from optimize_battery_schedule import optimize_battery_schedule
 
 def plot_result(spot_prices, load, pv_production, grid_power, soc):
     # Create time array for x-axis
@@ -50,7 +48,7 @@ def main():
     initial_soc = 50  # Start at 50% charge
     
     # Generate example spot prices with peak in morning and evening
-    spot_prices = fetch_nordpool_prices(2024, 10, 25, "NO1")
+    spot_prices = fetch_nordpool_prices(2024, 10, 25, "NO3")
     
     # Generate example load profile
     predicted_load = [
@@ -68,11 +66,6 @@ def main():
         0.0, 0.0, 0.0, 0.0, 0.0, 0.0   # Night
     ]
     
-    actual_load = []
-    actual_pv_production = []
-
-
-
     # Run optimization
     soc, grid_power = optimize_battery_schedule(
         battery_capacity,
@@ -82,38 +75,13 @@ def main():
         predicted_pv_production,
         initial_soc
     )
-    badsoc, badgrid = unoptimized_battery_schedule.unoptimize_battery_schedule(
-        battery_capacity,
-        charge_rate, 
-        spot_prices, 
-        predicted_load, 
-        predicted_pv_production, 
-        initial_soc)
-
-
-
 
     # Uncomment line below for plot
+    plot_result(spot_prices, predicted_load, predicted_pv_production, grid_power, soc)
     
-    # plot_result(spot_prices, predicted_load, predicted_pv_production, grid_power, soc)
-    # plot_result(spot_prices, predicted_load, predicted_pv_production, badgrid, badsoc)
-    hours = list(range(35))
-
-    plt(hours,grid_power)
-    plt(hours,badgrid)
-    
-    print(cashmoney(spot_prices,grid_power))
-    print(cashmoney(spot_prices,badgrid))
-
-
-
-
-
-def cashmoney(spot_prices, grid_power):
-
-    return np.sum(np.array(spot_prices) * np.array(grid_power)*3600)
-
+  
 
 if __name__ == "__main__":
     main()
 
+print("Skibidi")

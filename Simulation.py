@@ -7,7 +7,6 @@ import random as rd
 import pandas as pd
 
 import Temperature_during_day
-import 
 
 
 import HouseClass
@@ -31,7 +30,6 @@ data = np.array([14.64, 14.9, 15.18, 15.51, 16.97, 18.88, 18.35, 17.46, 18.52, 1
 
 class Simulation:
     time, day, year = 12, 1, 2024
-    month, textday = "january", "1"
     temp, clouds = [], []
     numhouses = 1
     houses = [None] * numhouses
@@ -40,18 +38,11 @@ class Simulation:
     PowerConsumption = [] # Holds the average power (Watts) a household uses based on the day of the year
     DailyBasis = [] # Holds the average power (Watts) a household uses based on the day of the year
 
-    def generate_spot_prices(self):
-
-
 
     def __init__(self, locations=None, areas=None, energylabels=None, solarpanelareas=None):
         
         # Generating the Average Temperature for each day of the year. 
-        self.DailyBasis = FourierTransform.fourier_series(data, 1, 365, self.timelist) # Holds the average Power usage of all days
-        StocasticVariation = data - FourierTransform.fourier_series(data,10, 50, self.timelist)
-        for i in range(len(self.DailyBasis)):
-            randVarind = rd.randint(0,len(self.DailyBasis))
-            self.DailyBasis[i] += StocasticVariation[randVarind] # Simulates and generates the difference that is from the seemingly periodic part of the "data" curve
+        self.EnergyConsumptionGenerator()
 
         # Initializing all the buildings that is inside the simulation
 
@@ -72,26 +63,8 @@ class Simulation:
             time = data['Hour'].values
             power_usage = data['PowerConsumption'].values
 
-    def WeatherSimulationGenerator(self):
-        []
-
-
-
-
 
     
-
-
-
-    def Simulator(self):
-        for day in range(365):
-            for time in range(24 / self.timestep):
-                for house in self.houses:
-                    self.TemperatureSimulator(house)
-                    self.WeatherSimulator(house)
-                    
-
-                self.TimePasser(self)
 
 
     def TemperatureSimulator(self, house):
@@ -106,9 +79,7 @@ class Simulation:
                 randInd = rd.randint(0,len(VariationDistribution)-1) 
                 GeneratedYearlyTemp[randInd] += VariationDistribution[randInd]/2
 
-            # plt.plot(tList, GeneratedYearlyTemp)
-            # plt.show()
-                
+            
             StartDay, EndDay = HouseClass.date_to_days(df["Date"].iloc[0]), HouseClass.date_to_days(df["Date"].iloc[-1])
             return GeneratedYearlyTemp
             print(StartDay, EndDay)
@@ -116,20 +87,10 @@ class Simulation:
     def WeatherSimulator(self, house):
         a =2
 
-    def GenerateTemperature(self):
+    
 
 
 
-
-
-     def TimePasser(self):
-        if time<23:
-            time += self.timestep
-        if time==24:
-            time = 0
-            day += 1
-        if day == 365:
-            year +=1
-
+     
 
 simulation = Simulation()
