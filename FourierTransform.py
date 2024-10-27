@@ -71,13 +71,13 @@ returnarr2 = fourier_series(new_data, n, T2, timelist2)
 
 
 
-# plt.plot(timelist1,returnarr1)
-plt.plot(timelist2,returnarr2)
+# # plt.plot(timelist1,returnarr1)
+# plt.plot(timelist2,returnarr2)
 
-# plt.plot(np.linspace(0,365*2,52*2),data)
-plt.plot(np.linspace(0,365, 52), new_data)
+# # plt.plot(np.linspace(0,365*2,52*2),data)
+# plt.plot(np.linspace(0,365, 52), new_data)
 
-plt.show()
+# plt.show()
 
 
 
