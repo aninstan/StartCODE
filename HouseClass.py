@@ -89,8 +89,6 @@ class House:
 
     def __init__(self, energy_label="E", house_area=108, house_placement=[63.4468,10.4219], family_size=2, CurrentRegion = "NO3", SolarPanelArea = 10,
                  eta = 0.2, I0 = 1000, S = 0.3, alpha = 0.004, T = 10, T0 = 25, city_code = "1-92416"):
-    def __init__(self, energy_label="E", house_area=108, house_placement=None, family_size=2, CurrentRegion = "NO3", SolarPanelArea = 10,
-                  eta = 0.2, I0 = 1000, S = 0.3, alpha = 0.004, T = 10, T0 = 25, cityCode = "1-92416", StartTime = 0, EndTime = 31):
         
         if house_placement is None:
             house_placement = [0, 0]  # Avoid mutable default argument
