@@ -46,9 +46,9 @@ def date_to_days(df): #konverterer dato til dag i året
     return antall_dager
 class SolarPanel:
 
-    def __init__(self, A = 1, eta = 0.2, I0 = 1000, phi = 60, S = 0.3, alpha = 0.004, T = 10, T0 = 25):
+    def __init__(self, SolarPanelArea = 1, eta = 0.2, I0 = 1000, phi = 60, S = 0.3, alpha = 0.004, T = 10, T0 = 25):
         #Mange parametre som avhenger av solcellepanel-typen
-        self.Area = A # Det totale arealet til solcellepanelene
+        self.Area = SolarPanelArea # Det totale arealet til solcellepanelene
         self.eta = eta # Virkningsgraden til solcellepaneltypen
         self.I0 = I0 # Maksimal solinnstråling under klare himmelforhold
         self.alpha = alpha # Temperaturkoeffisient
@@ -69,7 +69,7 @@ class SolarPanel:
             np.cos(np.radians(latitude)) * np.cos(np.radians(delta)) * np.cos(np.radians(omega)))))
         
         # Beregn solhøyde (h)
-                            # h = np.degrees(np.arcsin(np.sin(np.radians(phi)) * np.sin(np.radians(delta)) +
+                            # h = npp.degrees(np.arcsin(np.sin(np.radians(phi)) * np.sin(np.radians(delta)) +
                             # np.cos(np.radians(phi)) * np.cos(np.radians(delta)) * np.cos(np.radians(omega))))
         # Hva skjer med np.degrees og ikke np.maximum i den ene filen fra tidligere?
 
@@ -87,6 +87,8 @@ class House:
     AVERAGE_ENERGY = energy_data["E"][100] # Based on average energy label and average area for a household
 
 
+    def __init__(self, energy_label="E", house_area=108, house_placement=[63.4468,10.4219], family_size=2, CurrentRegion = "NO3", SolarPanelArea = 10,
+                 eta = 0.2, I0 = 1000, S = 0.3, alpha = 0.004, T = 10, T0 = 25, city_code = "1-92416"):
     def __init__(self, energy_label="E", house_area=108, house_placement=None, family_size=2, CurrentRegion = "NO3", SolarPanelArea = 10,
                   eta = 0.2, I0 = 1000, S = 0.3, alpha = 0.004, T = 10, T0 = 25, cityCode = "1-92416", StartTime = 0, EndTime = 31):
         
@@ -103,7 +105,7 @@ class House:
         self.PowerConditionsFactor = 1.0  # Specify the type for clarity
         self.CurrentRegion = CurrentRegion      
         self.Solarpanels = SolarPanel(SolarPanelArea,eta, I0, S, alpha, T, T0)
-
+        self.city_code = "1-92416"
         # self.setPowerUsage()
 
         self.weatherData = weather.weather_forecast(self.latitude, self.longitude)
