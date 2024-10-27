@@ -43,26 +43,21 @@ def weather_forecast(lat, lon):
     else:
         print(f"Failed to retrieve data: {response.status_code}")
 
-# Example usage
-weather_forecast(59.9, 10.8)
-
-
-
 
 
 def historical_weather(loc):
     # make 1-211102 a variable for the url
-
+    
     url = f"https://www.yr.no/api/v0/locations/{loc}/observations/year"
 
-# Set headers with User-Agent information
+    # Set headers with User-Agent information
     headers = {
         "User-Agent": "Your-Name - your-email@example.com"
     }
 
     # Make the GET request
     response = requests.get(url, headers=headers)
-
+    
     # Check if request was successful
     if response.status_code == 200:
         data = response.json()
@@ -97,9 +92,17 @@ def historical_weather(loc):
         df["date"] = pd.to_datetime(df["date"])
         df = df.dropna()
 
+        # Hente mean_temperatures
+        # with open("mean_temperatures.txt", "w") as file:
+        #     file.write("Date, Mean Temperature\n")  # Optional header
+        #     for index, row in df.iterrows():
+        #         file.write(f"{row['date'].date()}, {row['mean_temperature']}\n")
+
         return df
     else:
         print(f"Failed to retrieve data: {response.status_code}")
 
+
 # Example usage
-historical_weather("1-211102")
+# print(historical_weather("1-211102"))
+# print(weather_forecast(63.45, 10.42))
