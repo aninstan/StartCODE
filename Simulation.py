@@ -4,6 +4,10 @@ import HouseClass
 import FourierTransform
 import matplotlib.pyplot as plt
 import random as rd
+import Temperature_during_day
+import 
+
+
 TotHouseHolds = 2.6 * 10**6
 PowerUsageOfHouseHold = 0.3
 ConversionVariable = 10**9 * (PowerUsageOfHouseHold / TotHouseHolds) / 10**3
@@ -31,10 +35,13 @@ class Simulation:
     timelist = np.linspace(StartTime, EndTime, (EndTime-StartTime))
     DailyBasis = [] # Holds the average power (Watts) a household uses based on the day of the year
 
+    def generate_spot_prices(self):
+
+
 
     def __init__(self, locations=None, areas=None, energylabels=None, solarpanelareas=None):
         # Generating the Average Temperature for each day of the year. 
-        self.DailyBasis = FourierTransform.fourier_series(data, 10, 365, self.timelist) # Holds the average Power usage of all days
+        self.DailyBasis = FourierTransform.fourier_series(data, 1, 365, self.timelist) # Holds the average Power usage of all days
         StocasticVariation = data - FourierTransform.fourier_series(data,10, 50, self.timelist)
         for i in range(len(self.DailyBasis)):
             randVarind = rd.randint(0,len(self.DailyBasis))
